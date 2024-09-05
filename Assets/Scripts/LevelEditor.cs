@@ -89,6 +89,11 @@ public class LevelEditor : MonoBehaviour
         }
     }
 
+    public bool IsValidPosition(int x, int y)
+    {
+        return x >= 0 && x < level.Width && y >= 0 && y < level.Height;
+    }  
+
     private void SetupItem(int x, int y)
     {
         _items[x, y] = Instantiate(itemPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
@@ -219,9 +224,4 @@ public class LevelEditor : MonoBehaviour
         _grid.GridArray[x,y].SetItem(level.Items[indexArray[itemIndex]], indexArray[itemIndex]);
         _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
     }
-
-    public bool IsValidPosition(int x, int y)
-    {
-        return x >= 0 && x < level.Width && y >= 0 && y < level.Height;
-    }  
 }

@@ -24,7 +24,7 @@ public class Match3Visual : MonoBehaviour
     private int _startDragX;
     private int _startDragY;
     private float _cameraYOffset;
-    private Vector2 ItemScale;
+    private Vector2 _itemScale;
 
     public enum State {
         Busy,
@@ -39,7 +39,7 @@ public class Match3Visual : MonoBehaviour
         _match3 = match3;
         _cameraYOffset = cameraYOffset;
 
-        ItemScale = new Vector2(itemSize, itemSize);
+        _itemScale = new Vector2(itemSize, itemSize);
 
         _items = new SpriteRenderer[_grid.GetWidth(), _grid.GetHeight()];
         SetCameraPosition(xCameraPos, yCameraPos);
@@ -55,10 +55,9 @@ public class Match3Visual : MonoBehaviour
 
     public void SetupItem(int x, int y)
     {
-        
         _items[x, y] = Instantiate(itemprefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
         _items[x, y].transform.SetParent(this.transform);
-        _items[x, y].transform.localScale = ItemScale;
+        _items[x, y].transform.localScale = _itemScale;
         _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
     }
 
@@ -73,7 +72,8 @@ public class Match3Visual : MonoBehaviour
         {
             case State.Busy:
                 _busyTimer -= Time.deltaTime;
-                if (_busyTimer <= 0f) {
+                if (_busyTimer <= 0f) 
+                {
                     _onBusyTimerElapsedAction();
                 }
                 break;
@@ -182,7 +182,7 @@ public class Match3Visual : MonoBehaviour
         _items[endX, endY].enabled = false;
 
         SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(StartX, StartY), Quaternion.identity);
-        sprite1.transform.localScale = ItemScale;
+        sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[StartX,StartY].GetItemSO().Sprite;
 
         sprite1.transform.DOMove(_grid.GetCellCenterPosition(endX,endY), durarion).OnComplete(() => {
@@ -200,7 +200,7 @@ public class Match3Visual : MonoBehaviour
         SpawnPosition.y += _grid.GetCellSize();
 
         SpriteRenderer sprite1 = Instantiate(itemprefab, SpawnPosition, Quaternion.identity);
-        sprite1.transform.localScale = ItemScale;
+        sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x, y].GetItemSO().Sprite;
 
         sprite1.transform.DOMove(_grid.GetCellCenterPosition(x, y), durarion).OnComplete(() => {
@@ -216,11 +216,11 @@ public class Match3Visual : MonoBehaviour
         _items[x2, y2].enabled = false;
 
         SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
-        sprite1.transform.localScale = ItemScale;
+        sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x2,y2].GetItemSO().Sprite;
 
         SpriteRenderer sprite2 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x2,y2), Quaternion.identity);
-        sprite2.transform.localScale = ItemScale;
+        sprite2.transform.localScale = _itemScale;
         sprite2.sprite = _grid.GridArray[x1,y1].GetItemSO().Sprite;
 
         sprite1.transform.DOMove(_grid.GetCellCenterPosition(x2,y2), durarion).OnComplete(() => {
@@ -240,7 +240,7 @@ public class Match3Visual : MonoBehaviour
         _items[x1, y1].enabled = false;
 
         SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
-        sprite1.transform.localScale = ItemScale;
+        sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x1,y1].GetItemSO().Sprite;
 
         Vector2 position = _grid.GetCellCenterPosition(x1,y1);
@@ -251,7 +251,6 @@ public class Match3Visual : MonoBehaviour
 
         sequence.Append(sprite1.transform.DOMove(position, durarion/2));
         sequence.Append(sprite1.transform.DOMove(_grid.GetCellCenterPosition(x1,y1), durarion/2).OnComplete(() => {
-            
             Destroy(sprite1.gameObject);
             _items[x1, y1].enabled = true;
             _items[x1, y1].sprite = _grid.GridArray[x1,y1].GetItemSO().Sprite;

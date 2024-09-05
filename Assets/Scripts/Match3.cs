@@ -71,7 +71,9 @@ public class Match3 : MonoBehaviour
         else if (_playerData.GetCurrentLevel() == levels.Length - 1)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            ShowFullscreenAdv();
+            GameObject yandexSDK = GameObject.FindGameObjectWithTag("ySDK");
+            if (yandexSDK != null)
+                ShowFullscreenAdv();
 #endif
         }     
     }

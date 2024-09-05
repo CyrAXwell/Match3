@@ -9,12 +9,10 @@ public class PlayerData
     [DllImport("__Internal")]
     private static extern void ShowFullscreenAdv();
     
-    //public event Action LevelChanged;
     private int _currentLevel;
 
     public PlayerData()
     {
-        //ClearData();
         TryLoad();
     }
 
@@ -25,11 +23,13 @@ public class PlayerData
         Save();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        UpdateLeaderboardScore(_currentLevel);
-
-        ShowFullscreenAdv();
-#endif
-            
+        GameObject yandexSDK = GameObject.FindGameObjectWithTag("ySDK");
+        if (yandexSDK != null)
+        {
+            UpdateLeaderboardScore(_currentLevel);
+            ShowFullscreenAdv();
+        }
+#endif     
     }
 
     public int GetCurrentLevel()
