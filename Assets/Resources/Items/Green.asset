@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400bc5a4d6881a948bf4b8134c90729f, type: 3}
   m_Name: Green
   m_EditorClassIdentifier: 
+  _type: 4
+  _sprite: {fileID: 964262198, guid: 572eb4a126901614ba7a4b216993facc, type: 3}
+  _popEffect: {fileID: 7016133103544275064, guid: 10d5a045ccebc864b9ad774b45326520, type: 3}
   type: 4
   sprite: {fileID: 964262198, guid: 572eb4a126901614ba7a4b216993facc, type: 3}
   popEffect: {fileID: 7016133103544275064, guid: 10d5a045ccebc864b9ad774b45326520, type: 3}

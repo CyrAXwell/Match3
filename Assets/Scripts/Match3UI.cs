@@ -5,33 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class Match3UI : MonoBehaviour
 {
-    [SerializeField] private Match3 match3;
-    [SerializeField] private TMP_Text level;
-    [SerializeField] private TMP_Text score;
-    [SerializeField] private TMP_Text targetScore;
-    [SerializeField] private TMP_Text moves;
-    [SerializeField] private GameObject winPanel;
-    [SerializeField] private GameObject losePanel;
-    [SerializeField] private CanvasGroup transition;
-    [SerializeField] private GameObject glassIcon;
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private Match3 _match3;
+    [SerializeField] private TMP_Text _level;
+    [SerializeField] private TMP_Text _score;
+    [SerializeField] private TMP_Text _targetScore;
+    [SerializeField] private TMP_Text _moves;
+    [SerializeField] private GameObject _winPanel;
+    [SerializeField] private GameObject _losePanel;
+    [SerializeField] private CanvasGroup _transition;
+    [SerializeField] private GameObject _glassIcon;
+    [SerializeField] private AudioManager _audioManager;
 
     private void Awake()
     {
-        glassIcon.SetActive(false);
-        transition.gameObject.SetActive(true);
-        transition.DOFade(0, 0.5f).SetUpdate(UpdateType.Late, false).OnComplete(()=> transition.gameObject.SetActive(false));
+        _glassIcon.SetActive(false);
+        _transition.gameObject.SetActive(true);
+        _transition.DOFade(0, 0.5f).SetUpdate(UpdateType.Late, false).OnComplete(()=> _transition.gameObject.SetActive(false));
 
-        match3.OnScoreChange += OnScoreChange;
-        match3.OnSetLevel += OnSetLevel;
-        match3.OnMove += OnMove;
-        match3.OnGameOver += OnGameOver;
+        _match3.OnScoreChange += OnScoreChange;
+        _match3.OnSetLevel += OnSetLevel;
+        _match3.OnMove += OnMove;
+        _match3.OnGameOver += OnGameOver;
     }
 
     private void OnSetLevel()
     {
-        if (match3.GetTarget() == TargetType.glass)
-            glassIcon.SetActive(true);
+        if (_match3.GetTarget() == TargetType.glass)
+            _glassIcon.SetActive(true);
 
         UpdateText();
     }
@@ -50,35 +50,34 @@ public class Match3UI : MonoBehaviour
     {
         if (isWin)
         {
-            winPanel.SetActive(true);
-            audioManager.PlaySFX(audioManager.WinSound);
+            _winPanel.SetActive(true);
+            _audioManager.PlaySFX(_audioManager.WinSound);
         }
         else
         {
-            losePanel.SetActive(true);
-            audioManager.PlaySFX(audioManager.LoseSound);
+            _losePanel.SetActive(true);
+            _audioManager.PlaySFX(_audioManager.LoseSound);
         }
         UpdateText();
     }
 
     public void OnCloseGameOverPanel()
     {
-        audioManager.PlaySFX(audioManager.ButtonSound);
+        _audioManager.PlaySFX(_audioManager.ButtonSound);
 
-        winPanel.SetActive(false);
-        losePanel.SetActive(false);
+        _winPanel.SetActive(false);
+        _losePanel.SetActive(false);
         
-        transition.gameObject.SetActive(true);
-        transition.alpha = 0;
-        transition.DOFade(1, 0.5f).SetUpdate(UpdateType.Late, false).OnComplete(()=> SceneManager.LoadScene(0));
+        _transition.gameObject.SetActive(true);
+        _transition.alpha = 0;
+        _transition.DOFade(1, 0.5f).SetUpdate(UpdateType.Late, false).OnComplete(()=> SceneManager.LoadScene(0));
     }
 
     private void UpdateText()
     {
-        level.text = "Уровень " + (match3.GetLevel() + 1).ToString();
-        score.text = match3.GetScore().ToString();
-        targetScore.text = match3.GetTargetScore().ToString();
-        moves.text = match3.GetMoves().ToString();
+        _level.text = "Уровень " + (_match3.GetLevel() + 1).ToString();
+        _score.text = _match3.GetScore().ToString();
+        _targetScore.text = _match3.GetTargetScore().ToString();
+        _moves.text = _match3.GetMoves().ToString();
     }
-
 }

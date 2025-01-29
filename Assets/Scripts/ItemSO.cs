@@ -3,13 +3,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemSO", menuName = "ScriptableObjects/ItemSO")]
 public class ItemSO : ScriptableObject 
 {
-    [SerializeField] private ItemType type;
-    [SerializeField] private Sprite sprite;
-    [SerializeField] private ParticleSystem popEffect;
+    [SerializeField] private ItemType _type;
+    [SerializeField] private Sprite _sprite;
+    [SerializeField] private ParticleSystem _popEffect;
 
-    public ItemType Type => type;
-    public Sprite Sprite => sprite;
-    public ParticleSystem PopEffect => popEffect;
+    public ItemType Type => _type;
+    public Sprite Sprite => _sprite;
+    public ParticleSystem PopEffect => _popEffect;
 
 }
 

@@ -14,9 +14,8 @@ public class Match3 : MonoBehaviour
     public event Action OnMove;
     public event Action<bool> OnGameOver;
 
-    [SerializeField] private Match3Visual match3Visual;
-    [SerializeField] private LevelSO[] levels;
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private Match3Visual _match3Visual;
+    [SerializeField] private LevelSO[] _levels;
 
     private Grid2D<Cell> _grid;
     private LevelSO _levelSO;
@@ -37,16 +36,16 @@ public class Match3 : MonoBehaviour
     {
         _playerData = playerData;
         
-        _levelSO = levels[_playerData.GetCurrentLevel()];
+        _levelSO = _levels[_playerData.GetCurrentLevel()];
         _moves = _levelSO.Moves;
 
         _grid = new Grid2D<Cell>(_levelSO.Width, _levelSO.Height, _levelSO.CellSize, (int x, int y) => new Cell(x,y));
-        match3Visual.Initialize(_grid.GetCellPosition(_levelSO.Width, _levelSO.Height).x / 2f, _grid.GetCellPosition(_levelSO.Width, _levelSO.Height).y / 2 , _grid, this, _levelSO.ItemSize, _levelSO.CameraYOffset);
+        _match3Visual.Initialize(_grid.GetCellPosition(_levelSO.Width, _levelSO.Height).x / 2f, _grid.GetCellPosition(_levelSO.Width, _levelSO.Height).y / 2 , _grid, this, _levelSO.ItemSize, _levelSO.CameraYOffset);
 
         FillGrid();
         VerifyGrid();
 
-        match3Visual.InitializeState();
+        _match3Visual.InitializeState();
         OnSetLevel?.Invoke();
     }
 
@@ -64,11 +63,11 @@ public class Match3 : MonoBehaviour
 
     public void OnLoadLevelButton(bool isNextLevel)
     {
-        if (isNextLevel && _playerData.GetCurrentLevel() < levels.Length - 1)
+        if (isNextLevel && _playerData.GetCurrentLevel() < _levels.Length - 1)
         {
             _playerData.UnlockNewLevel();
         }
-        else if (_playerData.GetCurrentLevel() == levels.Length - 1)
+        else if (_playerData.GetCurrentLevel() == _levels.Length - 1)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             GameObject yandexSDK = GameObject.FindGameObjectWithTag("ySDK");
@@ -93,14 +92,14 @@ public class Match3 : MonoBehaviour
                 {
                     FillGridFromLevelSO(x, y); 
                 }
-                match3Visual.SetupItem(x, y);
+                _match3Visual.SetupItem(x, y);
 
                 foreach (var cell in _levelSO.gridCells)
                 {
                     if (cell.X == x && cell.Y == y && cell.HasGlass)
                     {
                         _targetGlassScore ++;
-                        match3Visual.SetGlass(x,y);
+                        _match3Visual.SetGlass(x,y);
                     }
                 }
             }
@@ -280,7 +279,7 @@ public class Match3 : MonoBehaviour
                     _grid.GridArray[x, y - emptyCells].FillCell(_grid.GridArray[x, y].GetItem());
                     _grid.GridArray[x, y].ClearItem();
 
-                    match3Visual.FallItemVisual(x, y, x, y - emptyCells, 0.3f);
+                    _match3Visual.FallItemVisual(x, y, x, y - emptyCells, 0.3f);
                 }
             }
         }
@@ -297,7 +296,7 @@ public class Match3 : MonoBehaviour
                     var item = GetRandomItem();
                     _grid.GridArray[x,y].SetItem(item.Item1, item.Item2);
                     
-                    match3Visual.SpawnNewItemVisual(x, y, 0.3f);
+                    _match3Visual.SpawnNewItemVisual(x, y, 0.3f);
                 }
             }
         }
@@ -337,7 +336,7 @@ public class Match3 : MonoBehaviour
         int itemIndex = UnityEngine.Random.Range(0, indexArray.Length);
         
         _grid.GridArray[x,y].SetItem(_levelSO.Items[indexArray[itemIndex]], indexArray[itemIndex]);
-        match3Visual.OnChangeItem(x, y);
+        _match3Visual.OnChangeItem(x, y);
     }
 
     private int GetMatchPossibleScore(int match)

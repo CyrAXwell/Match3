@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400bc5a4d6881a948bf4b8134c90729f, type: 3}
   m_Name: Item Purple
   m_EditorClassIdentifier: 
+  _type: 3
+  _sprite: {fileID: 1000048136, guid: 572eb4a126901614ba7a4b216993facc, type: 3}
+  _popEffect: {fileID: 7016133103544275064, guid: 0e5cce50bbcd54c4a9d654822c168b06, type: 3}
   type: 3
   sprite: {fileID: 1000048136, guid: 572eb4a126901614ba7a4b216993facc, type: 3}
   popEffect: {fileID: 7016133103544275064, guid: 0e5cce50bbcd54c4a9d654822c168b06, type: 3}

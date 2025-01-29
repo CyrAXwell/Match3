@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class Match3Bot : MonoBehaviour
 {
-    [SerializeField] private Match3 match3;
-    [SerializeField] private Match3Visual match3Visual;
+    [SerializeField] private Match3 _match3;
+    [SerializeField] private Match3Visual _match3Visual;
 
     private void Awake()
     {
-        match3Visual.StateChanged += OnStateChange;
+        _match3Visual.StateChanged += OnStateChange;
     }
 
     private void OnStateChange(Match3Visual.State state)
@@ -27,8 +27,8 @@ public class Match3Bot : MonoBehaviour
         
         if (possibleMove != null)
         {
-            match3Visual.BotSwap(possibleMove.StartX, possibleMove.StartY, possibleMove.EndX, possibleMove.EndY);
-            match3.DoMove();
+            _match3Visual.BotSwap(possibleMove.StartX, possibleMove.StartY, possibleMove.EndX, possibleMove.EndY);
+            _match3.DoMove();
         }
         else
         {
@@ -44,9 +44,9 @@ public class Match3Bot : MonoBehaviour
         int maxScore = 0;
         int maxGlassScore = 0;
 
-        for (int x = 0; x < match3.GetLevelSO().Width; x++)
+        for (int x = 0; x < _match3.GetLevelSO().Width; x++)
         {
-            for (int y = 0; y < match3.GetLevelSO().Height; y++)
+            for (int y = 0; y < _match3.GetLevelSO().Height; y++)
             {
                 List<Match3.PossibleMove> moves = new List<Match3.PossibleMove>();
                 moves.Add(new Match3.PossibleMove(x, y, x + 1, y));
@@ -56,36 +56,34 @@ public class Match3Bot : MonoBehaviour
 
                 foreach(Match3.PossibleMove move in moves)
                 {
-                    if(match3.IsValidPosition(move.EndX, move.EndY))
+                    if(_match3.IsValidPosition(move.EndX, move.EndY))
                     {
-                        match3.Swap(move.StartX, move.StartY, move.EndX, move.EndY);
+                        _match3.Swap(move.StartX, move.StartY, move.EndX, move.EndY);
 
-                        int score = match3.GetMatch3LinkScore();
+                        int score = _match3.GetMatch3LinkScore();
                         if (score > maxScore)
                         {
                             maxScore = score;
                             bestMove = move;
                         }
 
-                        int glassScore = match3.GetMatch3LinkGlassScore();
+                        int glassScore = _match3.GetMatch3LinkGlassScore();
                         if (glassScore > maxGlassScore)
                         {
                             maxGlassScore = glassScore;
                             bestGlassMove = move;
                         }
                         
-                        match3.Swap(move.StartX, move.StartY, move.EndX, move.EndY);
+                        _match3.Swap(move.StartX, move.StartY, move.EndX, move.EndY);
 
                     }
                 }  
             }
         }
 
-        if (match3.GetLevelSO().Target == TargetType.glass && bestGlassMove != null)
+        if (_match3.GetLevelSO().Target == TargetType.glass && bestGlassMove != null)
             return bestGlassMove;
         else
-            return bestMove;
-        
+            return bestMove;  
     }
-
 }

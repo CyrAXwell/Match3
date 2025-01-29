@@ -228,11 +228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1553f21e2fe62d478e8436c6ae4c70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 519420032}
-  itemprefab: {fileID: 1385422829631601451, guid: 3ffc36527a2142f4cb5c0f2f20ad0a22, type: 3}
-  glassPrefab: {fileID: 6463318819498783744, guid: 0cf08bd6088d87b41a00d95e0d3c3bc8, type: 3}
-  mainCamera: {fileID: 519420031}
-  audioManager: {fileID: 1327381058}
+  _itemprefab: {fileID: 1385422829631601451, guid: 3ffc36527a2142f4cb5c0f2f20ad0a22, type: 3}
+  _glassPrefab: {fileID: 6463318819498783744, guid: 0cf08bd6088d87b41a00d95e0d3c3bc8, type: 3}
+  _mainCamera: {fileID: 519420031}
+  _audioManager: {fileID: 1327381058}
 --- !u!4 &100355563
 Transform:
   m_ObjectHideFlags: 0
@@ -944,16 +943,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da331edb1724d804795a5921647ef133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  match3: {fileID: 423324644}
-  level: {fileID: 2133819552}
-  score: {fileID: 1103007546}
-  targetScore: {fileID: 335290481}
-  moves: {fileID: 1322098750}
-  winPanel: {fileID: 2116941407}
-  losePanel: {fileID: 1921427858}
-  transition: {fileID: 1065285910}
-  glassIcon: {fileID: 654456737}
-  audioManager: {fileID: 1327381058}
+  _match3: {fileID: 423324644}
+  _level: {fileID: 2133819552}
+  _score: {fileID: 1103007546}
+  _targetScore: {fileID: 335290481}
+  _moves: {fileID: 1322098750}
+  _winPanel: {fileID: 2116941407}
+  _losePanel: {fileID: 1921427858}
+  _transition: {fileID: 1065285910}
+  _glassIcon: {fileID: 654456737}
+  _audioManager: {fileID: 1327381058}
 --- !u!4 &419119103
 Transform:
   m_ObjectHideFlags: 0
@@ -1000,8 +999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3daca1f1b90753a47ac14961d1951e7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  match3Visual: {fileID: 100355562}
-  levels:
+  _match3Visual: {fileID: 100355562}
+  _levels:
   - {fileID: 11400000, guid: 84d4fa8fdc49df04690907449004da96, type: 2}
   - {fileID: 11400000, guid: fde4bde650ed8714e89bcdbfe353fbda, type: 2}
   - {fileID: 11400000, guid: a057266d7d89426418fcb76b771affb8, type: 2}
@@ -1052,7 +1051,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7833cf0760f7301429721107b454c604, type: 2}
   - {fileID: 11400000, guid: 8adedfea6d98ffe47bcc672bca4cfa0b, type: 2}
   - {fileID: 11400000, guid: 340b37152f5ce384d957d0fd223538b1, type: 2}
-  audioManager: {fileID: 1327381058}
 --- !u!4 &423324645
 Transform:
   m_ObjectHideFlags: 0
@@ -1097,7 +1095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b22f1c149878d4e91399dd7dc05e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  match3: {fileID: 423324644}
+  _match3: {fileID: 423324644}
 --- !u!4 &426981384
 Transform:
   m_ObjectHideFlags: 0
@@ -2357,10 +2355,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b824625a3769f7346936030b991e0a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 1112675979}
-  speed: 0.03
-  xDirection: 1
-  yDirection: 1
+  _image: {fileID: 1112675979}
+  _speed: 0.03
+  _xDirection: 1
+  _yDirection: 1
 --- !u!1 &1136477202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2906,8 +2904,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3220f65f4ecff754da3803fd24e98271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: d7862dba9e8c0c944a63afd1dd0b73b5, type: 2}
-  sFXSource: {fileID: 1702506570}
+  _audioMixer: {fileID: 24100000, guid: d7862dba9e8c0c944a63afd1dd0b73b5, type: 2}
+  _sFXSource: {fileID: 1702506570}
   MatchSound: {fileID: 8300000, guid: 00f75f99657c40e4b850d570c428ebbf, type: 3}
   SwapSound: {fileID: 8300000, guid: 7515e89e1498d6c49b042c8b0506b02f, type: 3}
   TrySwapSound: {fileID: 8300000, guid: 5cb1947073ef23b44ae239c4badf493c, type: 3}
@@ -2944,8 +2942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40ad66b2c0758164cb9d1a4c836156c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  match3: {fileID: 423324644}
-  match3Visual: {fileID: 100355562}
+  _match3: {fileID: 423324644}
+  _match3Visual: {fileID: 100355562}
 --- !u!4 &1337172597
 Transform:
   m_ObjectHideFlags: 0

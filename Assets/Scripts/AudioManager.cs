@@ -4,10 +4,10 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     [Header("AudioMixer")]
-    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private AudioMixer _audioMixer;
 
     [Header("AudioSources")]
-    [SerializeField] private AudioSource sFXSource;
+    [SerializeField] private AudioSource _sFXSource;
 
     [Header("Sounds")]
     [SerializeField] public AudioClip MatchSound;
@@ -20,21 +20,21 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        audioMixer.SetFloat("sfx", Mathf.Log10(1)*20);
+        _audioMixer.SetFloat("sfx", Mathf.Log10(1)*20);
     }
 
     public void PlaySFX(AudioClip clip)
     {
-        sFXSource.PlayOneShot(clip, 1f);
+        _sFXSource.PlayOneShot(clip, 1f);
     }
 
     public void MuteSFX()
     {
-        sFXSource.mute = true;
+        _sFXSource.mute = true;
     }
 
     public void UnMuteSFX()
     {
-        sFXSource.mute = false;
+        _sFXSource.mute = false;
     }
 }

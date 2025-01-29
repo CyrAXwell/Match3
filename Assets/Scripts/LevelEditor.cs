@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class LevelEditor : MonoBehaviour
 {
-    [SerializeField] private LevelSO level;
-    [SerializeField] private SpriteRenderer itemPrefab;
-    [SerializeField] private SpriteRenderer glassPrefab;
-    [SerializeField] private bool randomAutoFillLevel;
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private Camera mainCamera;
+    [SerializeField] private LevelSO _level;
+    [SerializeField] private SpriteRenderer _itemPrefab;
+    [SerializeField] private SpriteRenderer _glassPrefab;
+    [SerializeField] private bool _randomAutoFillLevel;
+    [SerializeField] private Camera _mainCamera;
 
     private Grid2D<Match3.Cell> _grid;
     private SpriteRenderer[,] _items;
@@ -17,42 +16,42 @@ public class LevelEditor : MonoBehaviour
     
     private void Awake()
     {
-        _items = new SpriteRenderer[level.Width, level.Height];
-        _itemScale = new Vector3(level.ItemSize, level.ItemSize, 1);
+        _items = new SpriteRenderer[_level.Width, _level.Height];
+        _itemScale = new Vector3(_level.ItemSize, _level.ItemSize, 1);
 
-        _grid = new Grid2D<Match3.Cell>(level.Width, level.Height, level.CellSize, (int x, int y) => new Match3.Cell(x,y));
+        _grid = new Grid2D<Match3.Cell>(_level.Width, _level.Height, _level.CellSize, (int x, int y) => new Match3.Cell(x,y));
 
-        Vector2 cameroPos = _grid.GetCellPosition(level.Width, level.Height);
+        Vector2 cameroPos = _grid.GetCellPosition(_level.Width, _level.Height);
 
-        cameraTransform.position = new Vector3(cameroPos.x / 2f, cameroPos.y / 2 + level.CameraYOffset, cameraTransform.position.z);
+        _mainCamera.transform.position = new Vector3(cameroPos.x / 2f, cameroPos.y / 2 + _level.CameraYOffset, _mainCamera.transform.position.z);
 
-        if (randomAutoFillLevel || level.gridCells.Count == 0)
+        if (_randomAutoFillLevel || _level.gridCells.Count == 0)
         {
-            for (int x = 0; x < level.Width; x++)
+            for (int x = 0; x < _level.Width; x++)
             {
-                for (int y = 0; y < level.Height; y++)
+                for (int y = 0; y < _level.Height; y++)
                 {
-                    foreach(var cell in level.gridCells)
+                    foreach(var cell in _level.gridCells)
                     {
                         if (cell.X == x && cell.Y == y && cell.HasGlass)
                         {
-                            SpriteRenderer glass = Instantiate(glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+                            SpriteRenderer glass = Instantiate(_glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
                             glass.transform.SetParent(this.transform);
-                            glass.transform.localScale = new Vector3(level.CellSize, level.CellSize, 1);
+                            glass.transform.localScale = new Vector3(_level.CellSize, _level.CellSize, 1);
                             _grid.GridArray[x,y].SetGlass(glass);
                         }
                     }
                 }
             }
-            level.gridCells = new List<LevelSO.GridCell>();
+            _level.gridCells = new List<LevelSO.GridCell>();
 
-            for (int x = 0; x < level.Width; x++)
+            for (int x = 0; x < _level.Width; x++)
             {
-                for (int y = 0; y < level.Height; y++)
+                for (int y = 0; y < _level.Height; y++)
                 {
                     var item = GetRandomItem();
                     _grid.GridArray[x,y].SetItem(item.Item1, item.Item2);
-                    level.gridCells.Add(new LevelSO.GridCell(x, y,item.Item1, item.Item2, _grid.GridArray[x,y].HasGlass));
+                    _level.gridCells.Add(new LevelSO.GridCell(x, y,item.Item1, item.Item2, _grid.GridArray[x,y].HasGlass));
 
                     SetupItem(x, y);
                 }
@@ -61,11 +60,11 @@ public class LevelEditor : MonoBehaviour
         }
         else
         {
-            for (int x = 0; x < level.Width; x++)
+            for (int x = 0; x < _level.Width; x++)
             {
-                for (int y = 0; y < level.Height; y++)
+                for (int y = 0; y < _level.Height; y++)
                 {
-                    foreach(var item in level.gridCells)
+                    foreach(var item in _level.gridCells)
                     {
                         if (item.X == x && item.Y == y)
                         {
@@ -74,9 +73,9 @@ public class LevelEditor : MonoBehaviour
 
                             if (item.HasGlass)
                             {
-                                SpriteRenderer glass = Instantiate(glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+                                SpriteRenderer glass = Instantiate(_glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
                                 glass.transform.SetParent(this.transform);
-                                glass.transform.localScale = new Vector3(level.CellSize, level.CellSize, 1);
+                                glass.transform.localScale = new Vector3(_level.CellSize, _level.CellSize, 1);
                                 _grid.GridArray[x,y].SetGlass(glass);
 
                             }
@@ -91,46 +90,46 @@ public class LevelEditor : MonoBehaviour
 
     public bool IsValidPosition(int x, int y)
     {
-        return x >= 0 && x < level.Width && y >= 0 && y < level.Height;
+        return x >= 0 && x < _level.Width && y >= 0 && y < _level.Height;
     }  
 
     private void SetupItem(int x, int y)
     {
-        _items[x, y] = Instantiate(itemPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+        _items[x, y] = Instantiate(_itemPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
         _items[x, y].transform.SetParent(this.transform);
         _items[x, y].transform.localScale = _itemScale;
         _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
 
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(level);
+            UnityEditor.EditorUtility.SetDirty(_level);
 #endif
     }
 
     private void Update()
     {
-        Vector3 worldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
         _grid.GetXY(worldPosition, out int x, out int y);
 
         if (IsValidPosition(x, y)) {
             if (Input.GetKeyDown(KeyCode.Alpha1))
-                _grid.GridArray[x,y].SetItem(level.Items[0], 0);
+                _grid.GridArray[x,y].SetItem(_level.Items[0], 0);
             if (Input.GetKeyDown(KeyCode.Alpha2))
-                _grid.GridArray[x,y].SetItem(level.Items[1], 1);
+                _grid.GridArray[x,y].SetItem(_level.Items[1], 1);
             if (Input.GetKeyDown(KeyCode.Alpha3))
-                _grid.GridArray[x,y].SetItem(level.Items[2], 2);
+                _grid.GridArray[x,y].SetItem(_level.Items[2], 2);
             if (Input.GetKeyDown(KeyCode.Alpha4))
-                _grid.GridArray[x,y].SetItem(level.Items[3], 3);
+                _grid.GridArray[x,y].SetItem(_level.Items[3], 3);
             if (Input.GetKeyDown(KeyCode.Alpha5))
-                _grid.GridArray[x,y].SetItem(level.Items[4], 4);
+                _grid.GridArray[x,y].SetItem(_level.Items[4], 4);
 
             if (Input.GetMouseButtonDown(1)) 
             {
                 if (!_grid.GridArray[x,y].HasGlass)
                 {
-                    SpriteRenderer glass = Instantiate(glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+                    SpriteRenderer glass = Instantiate(_glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
                     glass.transform.SetParent(this.transform);
-                    glass.transform.localScale = new Vector3(level.CellSize, level.CellSize, 1);
+                    glass.transform.localScale = new Vector3(_level.CellSize, _level.CellSize, 1);
                     _grid.GridArray[x,y].SetGlass(glass);
                 }
                 else
@@ -139,10 +138,10 @@ public class LevelEditor : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < level.gridCells.Count(); i++)
+            for (int i = 0; i < _level.gridCells.Count(); i++)
             {
-                if (level.gridCells[i].X == x && level.gridCells[i].Y == y)
-                    level.gridCells[i] =  new LevelSO.GridCell(x, y,_grid.GridArray[x,y].GetItemSO(), _grid.GridArray[x,y].GetItemIndex(), _grid.GridArray[x,y].HasGlass);
+                if (_level.gridCells[i].X == x && _level.gridCells[i].Y == y)
+                    _level.gridCells[i] =  new LevelSO.GridCell(x, y,_grid.GridArray[x,y].GetItemSO(), _grid.GridArray[x,y].GetItemIndex(), _grid.GridArray[x,y].HasGlass);
             }
 
             _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
@@ -151,18 +150,18 @@ public class LevelEditor : MonoBehaviour
 
     private (ItemSO, int) GetRandomItem()
     {
-        int index = UnityEngine.Random.Range(0, level.Items.Length);
-        return (level.Items[index], index);
+        int index = UnityEngine.Random.Range(0, _level.Items.Length);
+        return (_level.Items[index], index);
     }
 
     private void VerifyGrid()
     {
-        for (int x = 0; x < level.Width; x++)
+        for (int x = 0; x < _level.Width; x++)
         {
-            for (int y = 0; y < level.Height; y++)
+            for (int y = 0; y < _level.Height; y++)
             {
                 int rightLine = 1;
-                for (int i = x + 1; i < level.Width; i++)
+                for (int i = x + 1; i < _level.Width; i++)
                 {
                     if(IsValidPosition(i, y) && _grid.GridArray[x,y].GetItemSO().Type == _grid.GridArray[i, y].GetItemSO().Type)
                         rightLine++;
@@ -177,7 +176,7 @@ public class LevelEditor : MonoBehaviour
                 }
 
                 int upLine = 1;
-                for (int i = y + 1; i < level.Height; i++)
+                for (int i = y + 1; i < _level.Height; i++)
                 {
                     if(IsValidPosition(x, i) && _grid.GridArray[x,y].GetItemSO().Type == _grid.GridArray[x, i].GetItemSO().Type)
                         upLine++;
@@ -198,7 +197,7 @@ public class LevelEditor : MonoBehaviour
     {
         HashSet<int> set = new HashSet<int>();
 
-        for (int i = 0; i < level.Items.Length; i++)
+        for (int i = 0; i < _level.Items.Length; i++)
             set.Add(i);
 
         int left = x - 1;
@@ -221,7 +220,7 @@ public class LevelEditor : MonoBehaviour
 
         int itemIndex = UnityEngine.Random.Range(0, indexArray.Length);
         
-        _grid.GridArray[x,y].SetItem(level.Items[indexArray[itemIndex]], indexArray[itemIndex]);
+        _grid.GridArray[x,y].SetItem(_level.Items[indexArray[itemIndex]], indexArray[itemIndex]);
         _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
     }
 }

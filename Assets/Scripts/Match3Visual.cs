@@ -7,11 +7,10 @@ public class Match3Visual : MonoBehaviour
 {
     public event Action<State> StateChanged;
 
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private SpriteRenderer itemprefab;
-    [SerializeField] private SpriteRenderer glassPrefab;
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private SpriteRenderer _itemprefab;
+    [SerializeField] private SpriteRenderer _glassPrefab;
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private AudioManager _audioManager;
 
     private Grid2D<Match3.Cell> _grid;
     private Match3 _match3;
@@ -55,7 +54,7 @@ public class Match3Visual : MonoBehaviour
 
     public void SetupItem(int x, int y)
     {
-        _items[x, y] = Instantiate(itemprefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+        _items[x, y] = Instantiate(_itemprefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
         _items[x, y].transform.SetParent(this.transform);
         _items[x, y].transform.localScale = _itemScale;
         _items[x, y].sprite = _grid.GridArray[x,y].GetItemSO().Sprite;
@@ -81,7 +80,7 @@ public class Match3Visual : MonoBehaviour
             case State.WaitingForUser:
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Vector3 worldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
                     _startDragWorldPosition = worldPosition;
 
                     _grid.GetXY(worldPosition, out _startDragX, out _startDragY);
@@ -89,7 +88,7 @@ public class Match3Visual : MonoBehaviour
 
                 if (Input.GetMouseButtonUp(0))
                 {
-                    Vector3 worldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
                     _endDragWorldPosition = worldPosition;
 
                     float deltaX = _endDragWorldPosition.x - _startDragWorldPosition.x;
@@ -118,7 +117,7 @@ public class Match3Visual : MonoBehaviour
             case State.TryFindMatches:
                 if (_match3.TryFindMatchesAndDestroyThem())
                 {
-                    audioManager.PlaySFX(audioManager.MatchSound);
+                    _audioManager.PlaySFX(_audioManager.MatchSound);
                     PopItemsVisual();
                     SetBusyState(0.3f, ()=> {
                         _match3.FallItemsToEmptyCells();
@@ -181,7 +180,7 @@ public class Match3Visual : MonoBehaviour
         _items[StartX, StartY].enabled = false;
         _items[endX, endY].enabled = false;
 
-        SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(StartX, StartY), Quaternion.identity);
+        SpriteRenderer sprite1 = Instantiate(_itemprefab, _grid.GetCellCenterPosition(StartX, StartY), Quaternion.identity);
         sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[StartX,StartY].GetItemSO().Sprite;
 
@@ -199,7 +198,7 @@ public class Match3Visual : MonoBehaviour
         Vector2 SpawnPosition = _grid.GetCellCenterPosition(x, _grid.GetHeight() -1);
         SpawnPosition.y += _grid.GetCellSize();
 
-        SpriteRenderer sprite1 = Instantiate(itemprefab, SpawnPosition, Quaternion.identity);
+        SpriteRenderer sprite1 = Instantiate(_itemprefab, SpawnPosition, Quaternion.identity);
         sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x, y].GetItemSO().Sprite;
 
@@ -215,11 +214,11 @@ public class Match3Visual : MonoBehaviour
         _items[x1, y1].enabled = false;
         _items[x2, y2].enabled = false;
 
-        SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
+        SpriteRenderer sprite1 = Instantiate(_itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
         sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x2,y2].GetItemSO().Sprite;
 
-        SpriteRenderer sprite2 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x2,y2), Quaternion.identity);
+        SpriteRenderer sprite2 = Instantiate(_itemprefab, _grid.GetCellCenterPosition(x2,y2), Quaternion.identity);
         sprite2.transform.localScale = _itemScale;
         sprite2.sprite = _grid.GridArray[x1,y1].GetItemSO().Sprite;
 
@@ -239,7 +238,7 @@ public class Match3Visual : MonoBehaviour
     {
         _items[x1, y1].enabled = false;
 
-        SpriteRenderer sprite1 = Instantiate(itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
+        SpriteRenderer sprite1 = Instantiate(_itemprefab, _grid.GetCellCenterPosition(x1,y1), Quaternion.identity);
         sprite1.transform.localScale = _itemScale;
         sprite1.sprite = _grid.GridArray[x1,y1].GetItemSO().Sprite;
 
@@ -267,14 +266,14 @@ public class Match3Visual : MonoBehaviour
                 _match3.Swap(_startDragX, _startDragY, endX, endY);
                 if (_match3.HasMatch3Link())
                 {
-                    audioManager.PlaySFX(audioManager.SwapSound);
+                    _audioManager.PlaySFX(_audioManager.SwapSound);
                     _match3.DoMove();
                     SwapMoveVisual(_startDragX, _startDragY, endX, endY, 0.3f);
                     SetBusyState(0.3f,() => SetState(State.TryFindMatches));
                 }
                 else
                 {
-                    audioManager.PlaySFX(audioManager.TrySwapSound);
+                    _audioManager.PlaySFX(_audioManager.TrySwapSound);
                     _match3.Swap(_startDragX, _startDragY, endX, endY);
                     TrySwapVisual(_startDragX, _startDragY, endX, endY, 0.3f);
                     SetBusyState(0.3f,() => SetState(State.WaitingForUser));
@@ -282,7 +281,7 @@ public class Match3Visual : MonoBehaviour
             }
             else
             {
-                audioManager.PlaySFX(audioManager.TrySwapSound);
+                _audioManager.PlaySFX(_audioManager.TrySwapSound);
                 TrySwapVisual(_startDragX, _startDragY, endX, endY, 0.3f);
                 SetBusyState(0.3f,() => SetState(State.WaitingForUser));
             }
@@ -291,7 +290,7 @@ public class Match3Visual : MonoBehaviour
 
     public void SetGlass(int x, int y)
     {
-        SpriteRenderer glass = Instantiate(glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
+        SpriteRenderer glass = Instantiate(_glassPrefab, _grid.GetCellCenterPosition(x,y), Quaternion.identity);
         glass.transform.SetParent(this.transform);
         glass.transform.localScale = new Vector3(_grid.GetCellSize(), _grid.GetCellSize(), 1);
         _grid.GridArray[x,y].SetGlass(glass);
@@ -320,8 +319,6 @@ public class Match3Visual : MonoBehaviour
 
     private void SetCameraPosition(float xCameraPos, float yCameraPos)
     {
-        cameraTransform.position = new Vector3(xCameraPos , yCameraPos + _cameraYOffset, cameraTransform.position.z);
+        _mainCamera.transform.position = new Vector3(xCameraPos , yCameraPos + _cameraYOffset, _mainCamera.transform.position.z);
     }
-
-
 }

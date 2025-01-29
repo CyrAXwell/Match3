@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private Match3 match3;
+    [SerializeField] private Match3 _match3;
 
     private PlayerData _playerData;
 
@@ -20,7 +20,7 @@ public class Bootstrap : MonoBehaviour
 
     private void InitializeMatch3()
     {
-        match3.Initialize(_playerData);
+        _match3.Initialize(_playerData);
     }
 
 }

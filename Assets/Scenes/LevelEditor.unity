@@ -365,12 +365,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ac75adcc185c3e43a0295b658870522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: {fileID: 11400000, guid: 2c2597a696f034a46abdf1eb8a982fbc, type: 2}
-  itemPrefab: {fileID: 1385422829631601451, guid: 3ffc36527a2142f4cb5c0f2f20ad0a22, type: 3}
-  glassPrefab: {fileID: 6463318819498783744, guid: 0cf08bd6088d87b41a00d95e0d3c3bc8, type: 3}
-  randomAutoFillLevel: 1
-  cameraTransform: {fileID: 368058129}
-  mainCamera: {fileID: 368058128}
+  _level: {fileID: 11400000, guid: 2c2597a696f034a46abdf1eb8a982fbc, type: 2}
+  _itemPrefab: {fileID: 1385422829631601451, guid: 3ffc36527a2142f4cb5c0f2f20ad0a22, type: 3}
+  _glassPrefab: {fileID: 6463318819498783744, guid: 0cf08bd6088d87b41a00d95e0d3c3bc8, type: 3}
+  _randomAutoFillLevel: 0
+  _mainCamera: {fileID: 368058128}
 --- !u!4 &398386949
 Transform:
   m_ObjectHideFlags: 0
